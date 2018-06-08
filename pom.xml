@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>42d44be4-2cf1-4368-bed7-d9ee2bf2aeae</groupId>
+   <artifactId>custompolicy</artifactId>
+   <version>1.0.2</version>
+   <name>CustomPolicy</name>
+   <description>Custom Policy</description>
+
+   <packaging>mule-policy</packaging> 
+   <distributionManagement>
+       <repository>
+           <id>Repository</id>
+           <name>Corporate Repository</name>
+           <url>${exchange.url}</url>
+           <layout>default</layout>
+       </repository>
+   </distributionManagement>
+
+   <properties>
+       <mule.maven.plugin.version>3.1.1</mule.maven.plugin.version>
+       <anypoint.platform.org.id>42d44be4-2cf1-4368-bed7-d9ee2bf2aeae</anypoint.platform.org.id>
+       <exchange.url>
+           https://maven.anypoint.mulesoft.com/api/v1/organizations/${anypoint.platform.org.id}/maven
+       </exchange.url>
+       <mule.modules.scripting.version>1.1.1</mule.modules.scripting.version>
+   </properties>
+
+   <build>
+       <plugins>
+           <plugin>
+               <groupId>org.mule.tools.maven</groupId>
+               <artifactId>mule-maven-plugin</artifactId>
+               <version>${mule.maven.plugin.version}</version>
+               <extensions>true</extensions>
+           </plugin>
+           <plugin>
+			   <groupId>org.apache.maven.plugins</groupId>
+			   <artifactId>maven-deploy-plugin</artifactId>
+			   <executions>
+			       <execution>
+			           <id>upload-template</id>
+			           <phase>deploy</phase>
+			           <goals>
+			               <goal>deploy-file</goal>
+			           </goals>
+			           <configuration>
+			               <repositoryId>Repository</repositoryId>
+			               <url>${exchange.url}</url>
+			               <file>${project.basedir}/${project.artifactId}.yaml</file>
+			               <generatePom>false</generatePom>
+			               <artifactId>${project.artifactId}</artifactId>
+			               <groupId>${project.groupId}</groupId>
+			               <version>${project.version}</version>
+			               <packaging>yaml</packaging>
+			               <classifier>policy-definition</classifier>
+			           </configuration>
+			       </execution>
+			   </executions>
+			</plugin>
+       </plugins>
+   </build>
+      <dependencies>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-scripting-module</artifactId>
+            <version>${mule.modules.scripting.version}</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        	<dependency>
+			<groupId>com.mulesoft.anypoint</groupId>
+			<artifactId>mule-http-policy-transform-extension</artifactId>
+			<version>1.0.0</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+    </dependencies>
+</project>
